@@ -23,8 +23,8 @@ if __name__ == '__main__':
             pdb_id, chain_id = line.strip().split(':')
             ids.append((pdb_id, chain_id))
 
-    with Pool(2) as pool:
-        data = [(os.path.join(args.pdb_directory, f'{pdb_id.lower()}.pdb'), chain_id) for pdb_id, chain_id in ids]
+    with Pool(6) as pool:
+        data = [(os.path.join(args.pdb_directory, f'pdb{pdb_id.lower()}.ent'), chain_id) for pdb_id, chain_id in ids]
         rccs = pool.starmap(create_rcc, data)
 
     arr = np.array(rccs)
