@@ -49,7 +49,7 @@ def build_unweighted_psn(residues, distance_cutoff):
     # Add an edge between every pair of amino acids that has at least one atom pair
     # within the distance cutoff.
 
-    res_coords = [np.array([atom.coord for atom in residue]) for residue in residues]
+    res_coords = [np.array([atom.coord for atom in residue if atom.element != 'H']) for residue in residues]
 
     distance_cutoff = distance_cutoff ** 2
     for i, j in itertools.combinations(range(len(residues)), 2):
