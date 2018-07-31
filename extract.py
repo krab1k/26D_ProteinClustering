@@ -3,9 +3,10 @@ import os
 from RCCobject import RCC
 import numpy as np
 from multiprocessing import Pool
+import tqdm
 
-
-def create_rcc(pdb, chain):
+def create_rcc(data):
+    pdb, chain = data
     return RCC(pdb, chain).RCCvector
 
 
@@ -25,7 +26,7 @@ if __name__ == '__main__':
 
     with Pool(6) as pool:
         data = [(os.path.join(args.pdb_directory, f'pdb{pdb_id.lower()}.ent'), chain_id) for pdb_id, chain_id in ids]
-        rccs = pool.starmap(create_rcc, data)
+        rccs = list(tqdm.tqdm(pool.imap(create_rcc, data), total=len(ids)))
 
     arr = np.array(rccs)
     np.savetxt(args.output_file, arr, fmt='%4d', delimiter=',')
